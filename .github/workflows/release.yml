@@ -23,10 +23,11 @@ jobs:
         run: go get github.com/mitchellh/gox
 
       - name: Install ghr
-        uses: actions/setup-node@v2
-        with:
-          node-version: "14"
-      - run: npm install -g ghr
+        run: |
+          # Download the latest release of ghr from GitHub
+          curl -sL https://github.com/tcnksm/ghr/releases/latest/download/ghr_linux_amd64.tar.gz | tar xz
+          # Install ghr in /usr/local/bin
+          sudo mv ghr /usr/local/bin/
 
       - name: Build release binaries
         run: |
