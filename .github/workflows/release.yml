@@ -1,0 +1,43 @@
+name: Create Release Binary
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.16
+
+      - name: Install GoX
+        run: go get github.com/mitchellh/gox
+
+      - name: Build release binaries
+        run: |
+          # Replace this command with your build command to create the release binaries
+          gox -osarch="darwin/amd64 linux/amd64 windows/amd64" -output "mongo-backup-{{.OS}}-{{.Arch}}"
+
+      - name: Create release
+        run: |
+          # Replace this command with your own to create the release and get the upload URL
+          upload_url=$(curl --silent --request POST \
+            --url https://api.github.com/repos/${{ github.repository }}/releases \
+            --header "Authorization: Bearer ${{ secrets.PERSONAL_ACCESS_TOKEN }}" \
+            --header "Accept: application/vnd.github.v3+json" \
+            --data "{\"tag_name\":\"${{ github.ref }}\",\"name\":\"Release ${{ github.ref }}\",\"body\":\"This is an automated release created by a GitHub Actions workflow.\",\"draft\":false,\"prerelease\":false}" \
+            | jq -r '.upload_url')
+
+      - name: Upload release binaries
+        run: |
+          # Replace this command with your own to upload the release binaries using ghr
+          ghr --username ${{ github.actor }} --token ${{ secrets.PERSONAL_ACCESS_TOKEN }} --replace --prerelease ${{ github.ref }} mongo-backup-*
