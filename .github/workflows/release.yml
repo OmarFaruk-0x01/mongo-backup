@@ -25,7 +25,7 @@ jobs:
       - name: Build release binaries
         run: |
           # Replace this command with your build command to create the release binaries
-          gox -osarch="darwin/amd64 linux/amd64 windows/amd64" -output "mongo-backup-{{.OS}}-{{.Arch}}"
+          gox  -osarch="darwin/amd64 linux/amd64 windows/amd64" -output "mongo-backup-{{.OS}}-{{.Arch}}" ./cmd/cli
 
       - name: Create release
         run: |
