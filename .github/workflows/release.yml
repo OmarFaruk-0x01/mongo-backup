@@ -43,10 +43,10 @@ jobs:
             --url https://api.github.com/repos/${{ github.repository }}/releases \
             --header "Authorization: Bearer ${{ secrets.PERSONAL_ACCESS_TOKEN }}" \
             --header "Accept: application/vnd.github.v3+json" \
-            --data "{\"tag_name\":\"${{ github.ref }}\",\"name\":\"Release ${{ github.ref }}\",\"body\":\"This is an automated release created by a GitHub Actions workflow.\",\"draft\":false,\"prerelease\":false}" \
+            --data "{\"tag_name\":\"v1.0.0\",\"name\":\"Release v1.0.0\",\"body\":\"This is an automated release created by a GitHub Actions workflow.\",\"draft\":false,\"prerelease\":false}" \
             | jq -r '.upload_url')
 
       - name: Upload release binaries
         run: |
           # Replace this command with your own to upload the release binaries using ghr
-          ghr --username ${{ github.actor }} --token ${{ secrets.PERSONAL_ACCESS_TOKEN }} --replace --prerelease ${{ github.ref }} mongo-backup-*
+          ghr v1.0.0 --username ${{ github.actor }} --token ${{ secrets.PERSONAL_ACCESS_TOKEN }} --replace --prerelease ${{ github.ref }} mongo-backup-*
