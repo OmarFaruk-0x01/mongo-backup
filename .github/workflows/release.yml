@@ -25,9 +25,9 @@ jobs:
       - name: Install ghr
         run: |
           # Download the latest release of ghr from GitHub
-          curl -sL https://github.com/tcnksm/ghr/releases/latest/download/ghr_linux_amd64.tar.gz | tar xz
+          curl -sL https://github.com/tcnksm/ghr/releases/download/v0.16.0/ghr_v0.16.0_linux_amd64.tar.gz | tar xz
           # Install ghr in /usr/local/bin
-          sudo mv ghr /usr/local/bin/
+          sudo mv ghr_v0.16.0_linux_amd64/ghr /usr/local/bin/
 
       - name: Build release binaries
         run: |
