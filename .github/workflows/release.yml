@@ -1,6 +1,8 @@
 name: Create Release Binary
 on:
   push:
+    tags:
+      - v*
     branches:
       - master
   pull_request:
