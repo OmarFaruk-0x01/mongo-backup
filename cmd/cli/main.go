@@ -27,7 +27,6 @@ type Application struct {
 	backup_dir string
 
 	uri          string
-	prefix       string
 	db           string
 	filename     string
 	archive_path string
@@ -47,7 +46,6 @@ func main() {
 	root_dir = path.Join(root_dir, ".bkp")
 	out_dir := path.Join(root_dir, "backups")
 	uri := flag.String("uri", "", "Mongo Db URI")
-	prefix := flag.String("prefix", "", "Backup File Prefix")
 	db_name := flag.String("db", "", "Mongo Db Name")
 
 	s3_bucket := flag.String("bucket", "", "S3 bucket name")
@@ -58,7 +56,7 @@ func main() {
 
 	flag.Parse()
 
-	filename := fmt.Sprintf("%s-%s-%v.gz", *prefix, *db_name, time.Now().Format("monday-january-2-2006-3-04pm"))
+	filename := fmt.Sprintf("%s-%v.gz", *db_name, time.Now().Format("2006-01-02_15-04-05"))
 
 	app := &Application{
 		root_dir:     root_dir,
@@ -66,9 +64,8 @@ func main() {
 		filename:     filename,
 		archive_path: path.Join(out_dir, filename),
 
-		uri:    *uri,
-		prefix: *prefix,
-		db:     *db_name,
+		uri: *uri,
+		db:  *db_name,
 
 		aws_access_key: *aws_access_key,
 		aws_secret_key: *aws_secret_key,
@@ -167,10 +164,6 @@ func (a *Application) Validate() error {
 
 	if utils.IsEmpty(a.aws_secret_key) {
 		return errors.New("aws secret key required")
-	}
-
-	if utils.IsEmpty(a.prefix) {
-		return errors.New("prefix required")
 	}
 
 	if utils.IsEmpty(a.db) {
